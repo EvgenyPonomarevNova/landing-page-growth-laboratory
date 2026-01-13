@@ -122,13 +122,6 @@ a {
   opacity: 0.1;
 }
 /* Логотип и бренд */
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  min-width: auto;
-  text-decoration: none;
-}
 
 .logo-wrapper {
   width: 200px;
@@ -139,38 +132,6 @@ a {
   flex-shrink: 0;
   border-radius: 12px;
   overflow: hidden;
-}
-
-.brand-mark {
-  width: 36px;
-  height: 36px;
-  object-fit: contain;
-  display: block;
-}
-
-.brand-txt {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  line-height: 1.2;
-}
-
-.brand-txt b {
-  display: block;
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--text);
-  margin-bottom: 2px;
-}
-
-.brand-txt em {
-  display: block;
-  font-style: normal;
-  color: var(--muted2);
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.02em;
 }
 
 /* Навигационные ссылки - делаем их адаптивнее */
@@ -207,25 +168,25 @@ a {
   .brand {
     gap: 10px;
   }
-  
+
   .logo-wrapper {
     width: 44px;
     height: 44px;
   }
-  
+
   .brand-mark {
     width: 32px;
     height: 32px;
   }
-  
+
   .brand-txt b {
     font-size: 14px;
   }
-  
+
   .brand-txt em {
     font-size: 10px;
   }
-  
+
   .links {
     display: none;
   }
@@ -235,22 +196,22 @@ a {
   .brand {
     gap: 8px;
   }
-  
+
   .logo-wrapper {
     width: 40px;
     height: 40px;
     border-radius: 10px;
   }
-  
+
   .brand-mark {
     width: 28px;
     height: 28px;
   }
-  
+
   .brand-txt b {
     font-size: 13px;
   }
-  
+
   .brand-txt em {
     font-size: 9px;
   }
@@ -295,7 +256,6 @@ a {
   width: 100%;
   height: 160px;
   border-radius: 16px;
-
 }
 .brand-txt b {
   display: block;
@@ -892,7 +852,7 @@ h2 {
   gap: 14px;
 }
 .services > .svc {
-  flex: 0 0 calc((100% - 24px * 2) / 3);  /* 3 в ряд, учитываем 2 gap */
+  flex: 0 0 calc((100% - 24px * 2) / 3); /* 3 в ряд, учитываем 2 gap */
   box-sizing: border-box;
 }
 .svc {
@@ -1118,8 +1078,8 @@ h2 {
   position: relative;
 }
 .case-media-img {
-width: 100%;
-height: 100%;
+  width: 100%;
+  height: 100%;
 }
 .case.media::after {
   content: "";
@@ -1435,6 +1395,10 @@ select:focus {
   gap: 10px;
   flex-wrap: wrap;
 }
+.social-icon {
+  width: 100%;
+  max-width: 40px;
+}
 
 /* Footer */
 footer {
@@ -1590,9 +1554,11 @@ footer {
   }
   .grid.services {
     grid-template-columns: 1fr;
+    display: grid;
   }
   .stat-floats {
     grid-template-columns: 1fr;
+    display: grid;
   }
   .chart {
     height: 240px;
@@ -1605,6 +1571,9 @@ footer {
     padding: 10px 12px;
     font-size: 12px;
   }
+  .benefits {
+    grid-template-columns: repeat(1, 1fr);
+}
 }
 
 /* Reduced motion */
@@ -1625,5 +1594,483 @@ footer {
   .benefit-details,
   .svc-details {
     transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   APPEND-ONLY: Adaptive + cross-browser hardening (Safari / iOS / macOS)
+   ВАЖНО: ниже только добавочные переопределения (внутри @media/@supports),
+   чтобы десктоп-верстка (как сейчас) не менялась.
+   ========================================================================== */
+
+/* --- Safari backdrop-filter prefix (macOS/iOS) --- */
+@supports (-webkit-backdrop-filter: blur(1px)) {
+  .hdr,
+  .chart-stage,
+  .mini,
+  .pill,
+  .chart-kpi,
+  .stat-float,
+  .tooltip,
+  .modal .box,
+  .kv > div,
+  .chip,
+  .svc-tag,
+  .tag {
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Some elements use different blur values in base CSS; keep their original
+     backdrop-filter and only add the prefixed variant where missing. */
+  .hdr {
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .chart-stage {
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .mini,
+  .pill {
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .chart-kpi,
+  .stat-float,
+  .tooltip {
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+/* --- iOS text scaling / smoothing (scoped) --- */
+@supports (-webkit-touch-callout: none) {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* --- iOS safe-area insets for notch devices --- */
+@supports (padding: max(0px)) {
+  .progress {
+    top: env(safe-area-inset-top);
+  }
+  .hdr {
+    padding-top: max(0px, env(safe-area-inset-top));
+  }
+  .container {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+}
+
+/* --- Prevent iOS Safari input zoom (font-size >= 16px) --- */
+@supports (-webkit-touch-callout: none) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* --- Fix iOS 100vh issues: use dynamic/small viewport units when supported --- */
+@supports (height: 100svh) {
+  .modal {
+    min-height: 100svh;
+  }
+}
+@supports (height: 100dvh) {
+  .modal {
+    min-height: 100dvh;
+  }
+}
+
+/* --- Touch devices: remove hover-only lifts that feel "jumpy" --- */
+@media (hover: none) and (pointer: coarse) {
+  .btn:hover,
+  .svc:hover,
+  .benefit:hover,
+  .case:hover,
+  .tag:hover,
+  .links a:hover:after {
+    transform: none !important;
+  }
+  .btn:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   Принцип: уточняем размеры/сетки/отступы на реальных ширинах устройств,
+   не трогая десктоп (все изменения ниже — только в media queries).
+   ========================================================================== */
+
+/* 1440–1281: большие ноутбуки/широкие экраны — чуть компактнее визуал */
+@media (max-width: 1440px) {
+  .container {
+    width: min(var(--container), calc(100% - 64px));
+  }
+  .hero {
+    padding-top: 40px;
+  }
+  .hero-visual {
+    min-height: 400px;
+  }
+  .chart {
+    height: 270px;
+  }
+}
+
+/* 1280: типичный ноутбук (MacBook 13/14, Windows) */
+@media (max-width: 1280px) {
+  .container {
+    width: min(var(--container), calc(100% - 56px));
+  }
+  .links {
+    gap: 22px;
+    font-size: 15px;
+  }
+  .hero-grid {
+    gap: 22px;
+  }
+  .stat-floats {
+    width: min(320px, 48%);
+  }
+  .cut3 {
+    right: 110px;
+  }
+}
+
+/* 1200: компактные ноутбуки */
+@media (max-width: 1200px) {
+  .container {
+    width: min(var(--container), calc(100% - 48px));
+  }
+  .nav {
+    gap: 12px;
+  }
+  .brand {
+    min-width: 220px;
+  }
+  .links {
+    gap: 18px;
+    font-size: 14px;
+  }
+  .btn {
+    padding: 11px 15px;
+  }
+  .hero-visual-bg {
+    inset: -36px -54px -34px -40px;
+  }
+  .chart-kpi {
+    top: 58px;
+  }
+}
+
+/* 1020 already exists in base CSS; add refinements only */
+@media (max-width: 1020px) {
+  .nav {
+    padding: 12px 0;
+  }
+  .brand {
+    min-width: 0;
+  }
+  .cta {
+    gap: 8px;
+  }
+
+  /* Mobile menu: nicer spacing + readable hit areas */
+  .mobile .row {
+    gap: 12px;
+  }
+  .mobile a,
+  .mobile .btn {
+    border-radius: 18px;
+  }
+
+  /* Stat floats become 2 columns in base CSS — keep but make safer */
+  .stat-floats {
+    gap: 12px;
+  }
+  .cut3 {
+    right: 0;
+  } /* avoid overflow on narrow tablets */
+}
+
+/* 900: iPad portrait / small tablets */
+@media (max-width: 900px) {
+  h1 {
+    line-height: 1.02;
+  }
+  .hero {
+    padding: 38px 0 12px;
+  }
+  .hero-actions {
+    gap: 10px;
+  }
+  .chart-kpi {
+    border-radius: 18px;
+  }
+  .chart-stage {
+    border-radius: 24px;
+  }
+}
+
+/* 820: iPad (10.2/10.9) portrait-ish ranges */
+@media (max-width: 820px) {
+  section {
+    padding: 52px 0;
+  }
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .section-head .btn {
+    margin-top: 4px;
+  }
+  .pill-row {
+    gap: 8px;
+  }
+  .pill {
+    font-size: 12px;
+    padding: 9px 11px;
+  }
+  .chart {
+    height: 250px;
+  }
+}
+
+/* 720: large phones / small tablets */
+@media (max-width: 720px) {
+  .container {
+    width: min(var(--container), calc(100% - 40px));
+  }
+  h1 {
+    font-size: clamp(34px, 7vw, 46px);
+  }
+  .lead {
+    font-size: 15px;
+  }
+  .kicker {
+    font-size: 12px;
+  }
+  .btn.full-width {
+    width: 100%;
+  }
+
+  .chart-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .legend {
+    gap: 8px;
+  }
+
+  .card-inner {
+    padding: 18px;
+  }
+  .svc .in {
+    padding: 16px;
+  }
+}
+
+/* 600: common Android phones */
+@media (max-width: 600px) {
+  .nav {
+    padding: 10px 0;
+  }
+  .btn {
+    padding: 12px 14px;
+  }
+  .iconbtn {
+    width: 42px;
+    height: 42px;
+    border-radius: 16px;
+  }
+  .chart-kpi {
+    padding: 10px 12px;
+  }
+  .kpi-num {
+    font-size: 36px;
+  }
+  .stat-float {
+    border-radius: 16px;
+  }
+}
+
+/* 560 already exists in base CSS; add refinements only */
+@media (max-width: 560px) {
+  .hero {
+    padding: 34px 0 8px;
+  }
+  .hero-actions {
+    width: 100%;
+  }
+  .hero-actions .btn {
+    width: 100%;
+  }
+  .pill-row {
+    margin-top: 14px;
+  }
+  .chart-hint {
+    font-size: 11px;
+  }
+  .tooltip {
+    white-space: normal;
+    max-width: 240px;
+  }
+}
+
+/* 480: iPhone Plus / small Android */
+@media (max-width: 480px) {
+  .container {
+    width: min(var(--container), calc(100% - 32px));
+  }
+  .kicker {
+    padding: 7px 10px;
+  }
+  .pill {
+    padding: 9px 10px;
+  }
+  .brand-txt em {
+    display: none;
+  } /* keep header clean */
+  .mobile a {
+    padding: 12px 12px;
+  }
+
+  .chart-stage {
+    margin-top: 8px;
+  }
+  .chart {
+    height: 228px;
+  }
+
+  .cases-track {
+    grid-auto-columns: minmax(260px, 1fr);
+  }
+}
+
+/* 430: iPhone 15 Pro Max / 14 Pro Max width (portrait CSS px) */
+@media (max-width: 430px) {
+  h1 {
+    font-size: 34px;
+  }
+  .kpi-num {
+    font-size: 34px;
+  }
+  .logo-wrapper {
+    width: 100px;
+    height: 40px;
+  }
+  .brand-mark {
+       height: 80px;
+    object-fit: cover;
+  }
+}
+
+/* 414: iPhone 11/12/13/14 Pro Max width */
+@media (max-width: 414px) {
+  .container {
+    width: min(var(--container), calc(100% - 28px));
+  }
+  .section-head {
+    margin-bottom: 14px;
+  }
+  h2 {
+    font-size: 26px;
+  }
+}
+
+/* 390: iPhone 12/13/14 width */
+@media (max-width: 390px) {
+  h1 {
+    font-size: 32px;
+  }
+  .lead {
+    font-size: 14px;
+  }
+  .btn {
+    font-weight: 700;
+  }
+  .chart {
+    height: 220px;
+  }
+  .cases-track {
+    grid-auto-columns: minmax(240px, 1fr);
+  }
+}
+
+/* 375: iPhone SE (new) / legacy iPhones */
+@media (max-width: 375px) {
+  .container {
+    width: min(var(--container), calc(100% - 24px));
+  }
+  .kpi-num {
+    font-size: 32px;
+  }
+  .pill {
+    font-size: 11px;
+  }
+  .chart {
+    height: 212px;
+  }
+}
+
+/* 360: many Android devices */
+@media (max-width: 360px) {
+  h1 {
+    font-size: 30px;
+  }
+  .btn {
+    padding: 11px 12px;
+  }
+  .iconbtn {
+    width: 40px;
+    height: 40px;
+  }
+  .cases-track {
+    grid-auto-columns: minmax(228px, 1fr);
+  }
+}
+
+/* Landscape phones (iPhone/Android) — avoid huge header & keep chart visible */
+@media (max-height: 430px) and (orientation: landscape) {
+  .hdr {
+    position: sticky;
+  }
+  .hero {
+    padding-top: 24px;
+  }
+  .hero-visual {
+    min-height: 320px;
+  }
+  .chart {
+    height: 200px;
+  }
+  section {
+    padding: 42px 0;
+  }
+}
+
+/* ==========================================================================
+   Accessibility / motion on Apple devices (optional, safe)
+   ========================================================================== */
+@media (prefers-contrast: more) {
+  .card,
+  .svc,
+  .benefit,
+  .case,
+  .modal .box {
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+  .links a:after {
+    opacity: 1;
+  }
+}
+@media (max-width: 1020px) {
+  .mobile[hidden] {
+    display: none !important;
   }
 }
