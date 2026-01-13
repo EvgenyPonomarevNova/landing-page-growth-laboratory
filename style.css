@@ -2074,3 +2074,26 @@ footer {
     display: none !important;
   }
 }
+
+/* ---- Fix: mobile horizontal scroll (iOS Safari / blur / absolute insets) ---- */
+@media (max-width: 1020px) {
+  html, body {
+    overflow-x: clip;
+  }
+  /* fallback for browsers without overflow-x: clip */
+  @supports not (overflow: clip) {
+    html, body { overflow-x: hidden; }
+  }
+
+  /* constrain the wide hero glow on mobile */
+  .hero-visual {
+    overflow: hidden;            /* only on mobile */
+  }
+  .hero-visual-bg {
+    inset: -28px -18px -22px -18px;  /* narrower than desktop */
+  }
+
+  /* just in case some floats extend */
+  .stat-floats { right: 0; }
+}
+
